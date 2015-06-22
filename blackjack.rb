@@ -14,31 +14,32 @@ def say(msg)
   puts "=> #{msg}"
 end
 
-def first_card_suit(player)
-  case player[0][0]
-  when 'H'
-    h = 'Hearts'
-  when 'D'
-    d = 'Diamonds'
-  when 'S'
-    s = 'Spaids'
-  else
-    c = 'Clubs'
-  end
+def card_suit(player)
+  suit =
+    case player
+    when 'H'
+      'Hearts'
+    when 'D'
+      'Diamonds'
+    when 'S'
+      'Spaids'
+    when 'C'
+      'Clubs'
+    end
 end
 
-def last_card_suit(player)
-  case player.last.first
-  when 'H'
-    h = 'Hearts'
-  when 'D'
-    d = 'Diamonds'
-  when 'S'
-    s = 'Spaids'
-  when 'C'
-    c = 'Clubs'
-  end
-end
+# def last_card_suit(player)
+#   case player.last.first
+#   when 'H'
+#     h = 'Hearts'
+#   when 'D'
+#     d = 'Diamonds'
+#   when 'S'
+#     s = 'Spaids'
+#   when 'C'
+#     c = 'Clubs'
+#   end
+# end
 
 def calculate_total(cards) 
   # [['H', '3'], ['S', 'Q'], ... ]
@@ -128,9 +129,9 @@ chip_total = 100
 
 begin
 
-chips_wagered = 0
-player_total = 0
-dealer_total = 0
+  chips_wagered = 0
+  player_total = 0
+  dealer_total = 0
 
   # Create Deck
 
@@ -148,10 +149,10 @@ dealer_total = 0
   player_cards << deck.pop
   dealer_cards << deck.pop
 
-  first_player_suit = first_card_suit(player_cards)
-  first_dealer_suit = first_card_suit(dealer_cards)
-  last_player_suit = last_card_suit(player_cards)
-  last_dealer_suit = last_card_suit(dealer_cards)
+  first_player_suit = card_suit(player_cards.first.first)
+  first_dealer_suit = card_suit(dealer_cards.first.first)
+  last_player_suit = card_suit(player_cards.last.first)
+  last_dealer_suit = card_suit(dealer_cards.last.first)
 
   say "Your chip total is currently #{chip_total}."
 
@@ -159,7 +160,7 @@ dealer_total = 0
 
   say "How many chips would you like to wager?"
   chips_wagered = gets.chomp.to_i
-  while chips_wagered > chip_total do
+  while chips_wagered > chip_total
     say "Your wagered amount is too high, please enter an amount less or equal to your current chip count."
     chips_wagered = gets.chomp.to_i
   end
@@ -202,16 +203,15 @@ dealer_total = 0
     say "Would #{player_name} like to hit or stay?(H/S)"
     hit_again = gets.chomp.upcase
     
-    while hit_again == 'H' do
+    while hit_again == 'H'
       player_cards << deck.pop
       # if player_cards.last[1] == 'Jack' || player_cards.last[1] == 'Queen' || player_cards.last[1] == 'King'
       #   player_cards.last[1] = '10'
       # end
-      last_player_suit = last_card_suit(player_cards)
+      last_player_suit = card_suit(player_cards.last.first)
       say "#{player_name}'s new card is a #{player_cards.last.last} of #{last_player_suit}."
       # player_total = player_total + player_cards.last.last.to_i
       player_total = calculate_total(player_cards)
-      player_total
       sleep(2)
       say "#{player_name}'s new total is #{player_total}!"
       if player_total > 21
@@ -235,14 +235,14 @@ dealer_total = 0
 
     sleep(2)
 
-    while dealer_total < 17 do
+    while dealer_total < 17 
       say "The dealer will hit again."
       sleep(2)
       dealer_cards << deck.pop
       # if dealer_cards.last[1] == 'Jack' || dealer_cards.last[1] == 'Queen' || dealer_cards.last[1] == 'King'
       #   dealer_cards.last[1] = '10'
       # end
-      last_dealer_suit = last_card_suit(dealer_cards)
+      last_dealer_suit = card_suit(dealer_cards.last.first)
       say "The dealer got a #{dealer_cards.last.last} of #{last_dealer_suit}."
       sleep(2)
       # dealer_total = dealer_total + dealer_cards.last[1].to_i
@@ -254,37 +254,37 @@ dealer_total = 0
 
   end
 
-if player_total == dealer_total
-  say "#{player_name} and dealer tied!"
-elsif player_total == 21
-  say "#{player_name} hit BlackJack and wins!"
-  chip_total += chips_wagered
-elsif player_total > 21
-  say "#{player_name} busted!"
-  chip_total -= chips_wagered
-elsif dealer_total <= 21 && dealer_total > player_total
-  say "Dealer wins!"
-  chip_total -= chips_wagered
-else
-  say "#{player_name} beat the dealer!"
-  chip_total += chips_wagered
-end
+  if player_total == dealer_total
+    say "#{player_name} and dealer tied!"
+  elsif player_total == 21
+    say "#{player_name} hit BlackJack and wins!"
+    chip_total += chips_wagered
+  elsif player_total > 21
+    say "#{player_name} busted!"
+    chip_total -= chips_wagered
+  elsif dealer_total <= 21 && dealer_total > player_total
+    say "Dealer wins!"
+    chip_total -= chips_wagered
+  else
+    say "#{player_name} beat the dealer!"
+    chip_total += chips_wagered
+  end
 
-sleep(2)
+  sleep(2)
 
-say "Your chip total is now #{chip_total}."
+  say "Your chip total is now #{chip_total}."
 
-sleep(2)
+  sleep(2)
 
-if chip_total < 300 && chip_total > 0
-  say "Would you like to keep playing?(Y/N)"
-elsif chip_total >= 300
-  say "Congrajulations!  #{player_name} won the game! Would you like to play again?(Y/N)"
-  chip_total = 100
-else
-  say "#{player_name} lost :(.  Would you like to play again?(Y/N)"
-  chip_total = 100
-end
+  if chip_total < 300 && chip_total > 0
+    say "Would you like to keep playing?(Y/N)"
+  elsif chip_total >= 300
+    say "Congrajulations!  #{player_name} won the game! Would you like to play again?(Y/N)"
+    chip_total = 100
+  else
+    say "#{player_name} lost :(.  Would you like to play again?(Y/N)"
+    chip_total = 100
+  end
 
 end while gets.chomp.upcase == 'Y'
 
